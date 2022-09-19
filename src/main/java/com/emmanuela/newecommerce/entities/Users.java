@@ -2,12 +2,15 @@ package com.emmanuela.newecommerce.entities;
 
 import com.emmanuela.newecommerce.enums.AuthenticationProvider;
 import com.emmanuela.newecommerce.enums.UsersStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Getter
 @Setter
@@ -38,4 +41,8 @@ public class Users extends BaseClass{
 
     @Enumerated(EnumType.STRING)
     private UsersStatus usersStatus;
+
+    @JsonIgnore
+    @OneToMany(targetEntity = Task.class, mappedBy = "user1")
+    private List<Task> task;
 }

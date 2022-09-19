@@ -37,13 +37,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable();
-        http.authorizeRequests().antMatchers("/users/**",  "/**").permitAll();
+        http.authorizeRequests().antMatchers("/users/**", "/tasks/**",  "/**").permitAll();
 
 
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/users/get-user/**",
                 "/users/get-username").hasAnyAuthority("USER");
 
-        http.authorizeRequests().antMatchers(HttpMethod.POST,  "/users/change-password")
+        http.authorizeRequests().antMatchers(HttpMethod.POST,  "/users/change-password", "/tasks/create-task")
                 .hasAnyAuthority("USER");
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

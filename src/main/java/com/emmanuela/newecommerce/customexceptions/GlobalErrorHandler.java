@@ -56,7 +56,7 @@ public class GlobalErrorHandler {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(ex.getMessage());
         errorResponse.setDebugMessage("Email Already Confirmed");
-        return new ResponseEntity<>(errorResponse, HttpStatus.OK);
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(InvalidCredentialsException.class)
@@ -64,6 +64,22 @@ public class GlobalErrorHandler {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(ex.getMessage());
         errorResponse.setDebugMessage("Invalid credentials");
-        return new ResponseEntity<>(errorResponse, HttpStatus.OK);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TaskAlreadyExistException.class)
+    public ResponseEntity<ErrorResponse> handleTaskAlreadyExist(final TaskAlreadyExistException ex){
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setDebugMessage("Task Title already Exists");
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TaskNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleTaskNotFound(final TaskNotFoundException ex){
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setDebugMessage("Task Not Found");
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }

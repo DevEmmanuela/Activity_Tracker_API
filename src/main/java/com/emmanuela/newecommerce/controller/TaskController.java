@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -23,5 +22,10 @@ public class TaskController {
     @GetMapping("/task-by-status")
     public ResponseEntity<List<TaskRequest>> getTaskByStatus(@RequestParam("status")  TaskStatus status){
         return new ResponseEntity<>(taskService.findByTaskStatus(status), HttpStatus.OK);
+    }
+
+    @PutMapping("/update-task/{id}")
+    public ResponseEntity<String> updateTask(@PathVariable("id") Long id, @RequestBody TaskRequest taskRequest){
+        return new ResponseEntity<>(taskService.updateTask(id, taskRequest), HttpStatus.OK);
     }
 }

@@ -1,5 +1,7 @@
 package com.emmanuela.newecommerce.services.serviceimpl;
 
+import com.emmanuela.newecommerce.customexceptions.TaskAlreadyExistException;
+import com.emmanuela.newecommerce.customexceptions.TaskNotFoundException;
 import com.emmanuela.newecommerce.customexceptions.UserNotFoundException;
 import com.emmanuela.newecommerce.entities.Task;
 import com.emmanuela.newecommerce.entities.Users;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +33,13 @@ public class TaskServiceImpl implements TaskService {
         if(users == null){
             throw new UserNotFoundException("user not found");
         }
+
+        Optional<Task> existingTask = Optional.ofNullable(taskRepository.findTaskByTitle(taskRequest.getTitle()));
+
+        if(existingTask.isPresent()){
+            throw new TaskAlreadyExistException("This task title already exist");
+        }
+
         Task task = new Task();
         task.setTitle(taskRequest.getTitle());
         task.setDescription(taskRequest.getDescription());
@@ -50,6 +60,9 @@ public class TaskServiceImpl implements TaskService {
         }
 
         List<Task> usersTask = taskRepository.findTaskByStatus(status);
+        if(usersTask == null){
+            throw new TaskNotFoundException("Task not found");
+        }
 
         List<TaskRequest> tasks = new ArrayList<>();
 
@@ -66,5 +79,26 @@ public class TaskServiceImpl implements TaskService {
             tasks.add(taskRequest);
         }
         return tasks;
+    }
+
+    @Override
+    public String updateTask(Long taskId, TaskRequest taskRequest) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Users users = usersRepository.findUsersByEmail(user.getUsername());
+        if(users == null){
+            throw new UserNotFoundException("user not found");
+        }
+
+        Task task = taskRepository.findTaskById(taskId);
+        if(task == null){
+            throw new TaskNotFoundException("Task Not Found");
+        }
+
+        task.setTitle(taskRequest.getTitle());
+        task.setDescription(taskRequest.getDescription());
+        task.setUpdatedAt(taskRequest.getUpdatedAt());
+        task.setUpdatedAt(LocalDateTime.now());
+        taskRepository.save(task);
+        return "Task Updated";
     }
 }

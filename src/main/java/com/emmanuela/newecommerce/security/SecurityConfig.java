@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/users/get-user/**",
-                "/users/get-username").hasAnyAuthority("USER");
+                "/users/get-username", "/tasks/task-by-status").hasAnyAuthority("USER");
 
         http.authorizeRequests().antMatchers(HttpMethod.POST,  "/users/change-password", "/tasks/create-task")
                 .hasAnyAuthority("USER");

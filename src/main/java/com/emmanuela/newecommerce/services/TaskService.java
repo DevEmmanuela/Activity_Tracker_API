@@ -1,10 +1,11 @@
 package com.emmanuela.newecommerce.services;
 
+import com.emmanuela.newecommerce.enums.TaskStatus;
 import com.emmanuela.newecommerce.request.TaskRequest;
 
+import java.util.List;
+
 public interface TaskService {
-    //String create(CreateTaskDto createTaskDto);
-    //    List<TaskResponseDto> findByStatus(Status status);
     //
     //    String UpdateTaskByUser(Long id, UserTaskUpdateDto userTaskUpdateDto);
     //
@@ -15,4 +16,6 @@ public interface TaskService {
     //    String deleteTask(Long id);
 
     String createTask(TaskRequest taskRequest);
+
+    List<TaskRequest> findByTaskStatus(TaskStatus status);
 }

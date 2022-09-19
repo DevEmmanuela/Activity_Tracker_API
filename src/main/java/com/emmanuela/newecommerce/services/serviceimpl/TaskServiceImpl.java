@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -37,5 +39,32 @@ public class TaskServiceImpl implements TaskService {
 
         taskRepository.save(task);
         return "Task created successfully";
+    }
+
+    @Override
+    public List<TaskRequest> findByTaskStatus(TaskStatus status) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Users users = usersRepository.findUsersByEmail(user.getUsername());
+        if(users == null){
+            throw new UserNotFoundException("user not found");
+        }
+
+        List<Task> usersTask = taskRepository.findTaskByStatus(status);
+
+        List<TaskRequest> tasks = new ArrayList<>();
+
+        for(Task eachTask : usersTask){
+            TaskRequest taskRequest = new TaskRequest();
+            taskRequest.setStatus(eachTask.getStatus());
+            taskRequest.setDescription(eachTask.getDescription());
+            taskRequest.setTitle(eachTask.getTitle());
+            taskRequest.setCreatedAt(eachTask.getCreatedAt());
+            taskRequest.setUpdatedAt(eachTask.getUpdatedAt());
+            taskRequest.setCompletedAt(eachTask.getCompletedAt());
+            taskRequest.setId(eachTask.getId());
+
+            tasks.add(taskRequest);
+        }
+        return tasks;
     }
 }

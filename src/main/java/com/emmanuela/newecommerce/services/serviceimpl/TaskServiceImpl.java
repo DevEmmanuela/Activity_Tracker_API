@@ -151,4 +151,20 @@ public class TaskServiceImpl implements TaskService {
 
         return tasks;
     }
+
+    @Override
+    public String deleteTask(Long taskId) {
+        User user4 = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Users users = usersRepository.findUsersByEmail(user4.getUsername());
+        if(users == null){
+            throw new UserNotFoundException("user not found");
+        }
+
+        Task task = taskRepository.findTaskById(taskId);
+        if(task == null){
+            throw new TaskNotFoundException("Task Not Found");
+        }
+        taskRepository.deleteById(taskId);
+        return "Task successfully deleted";
+    }
 }

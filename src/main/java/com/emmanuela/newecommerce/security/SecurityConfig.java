@@ -46,8 +46,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers(HttpMethod.POST,  "/users/change-password", "/tasks/create-task")
                 .hasAnyAuthority("USER");
 
-        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/tasks/update-task/{id}")
-                        .hasAnyAuthority("USER");
+        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/tasks/update-task/{id}",
+                        "/tasks/update-task-status/{id}").hasAnyAuthority("USER");
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().anyRequest()

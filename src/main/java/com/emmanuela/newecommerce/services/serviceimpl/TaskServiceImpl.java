@@ -53,8 +53,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskRequest> findByTaskStatus(TaskStatus status) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Users users = usersRepository.findUsersByEmail(user.getUsername());
+        User user1 = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Users users = usersRepository.findUsersByEmail(user1.getUsername());
         if(users == null){
             throw new UserNotFoundException("user not found");
         }
@@ -83,8 +83,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public String updateTask(Long taskId, TaskRequest taskRequest) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Users users = usersRepository.findUsersByEmail(user.getUsername());
+        User user2 = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Users users = usersRepository.findUsersByEmail(user2.getUsername());
         if(users == null){
             throw new UserNotFoundException("user not found");
         }
@@ -100,5 +100,29 @@ public class TaskServiceImpl implements TaskService {
         task.setUpdatedAt(LocalDateTime.now());
         taskRepository.save(task);
         return "Task Updated";
+    }
+    @Override
+    public String updateByStatus(Long taskId, TaskRequest taskRequest) {
+        User user3 = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Users users = usersRepository.findUsersByEmail(user3.getUsername());
+        if(users == null){
+            throw new UserNotFoundException("user not found");
+        }
+
+        Task task = taskRepository.findTaskById(taskId);
+        if(task == null){
+            throw new TaskNotFoundException("Task Not Found");
+        }
+
+        task.setStatus(taskRequest.getStatus());
+        if(task.getStatus() == TaskStatus.DONE){
+            task.setCompletedAt(LocalDateTime.now());
+        }
+        else{
+            task.setCompletedAt(null);
+        }
+        task.setUpdatedAt(LocalDateTime.now());
+        taskRepository.save(task);
+        return "Status Updated";
     }
 }

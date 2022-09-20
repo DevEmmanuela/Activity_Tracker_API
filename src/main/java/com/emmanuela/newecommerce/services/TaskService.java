@@ -17,4 +17,5 @@ public interface TaskService {
     List<TaskRequest> findByTaskStatus(TaskStatus status);
 
     String updateTask(Long taskId, TaskRequest taskRequest);
+    String updateByStatus(Long taskId, TaskRequest taskRequest);
 }

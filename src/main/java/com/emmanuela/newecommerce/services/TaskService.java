@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface TaskService {
     //
-    //    String UpdateByStatus(Long id, UserTaskStatusUpdateDto userTaskStatusUpdateDto);
-    //
     //    List<AllTaskResponseDto> findAllTaskByUser();
     //
     //    String deleteTask(Long id);
@@ -18,4 +16,5 @@ public interface TaskService {
 
     String updateTask(Long taskId, TaskRequest taskRequest);
     String updateByStatus(Long taskId, TaskRequest taskRequest);
+    List<TaskRequest> findAllTask();
 }

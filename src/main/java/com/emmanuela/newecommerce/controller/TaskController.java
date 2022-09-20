@@ -33,4 +33,9 @@ public class TaskController {
     public ResponseEntity<String> updateTaskStatus(@PathVariable("id") Long taskId, @RequestBody TaskRequest taskRequest){
         return new ResponseEntity<>(taskService.updateByStatus(taskId, taskRequest), HttpStatus.OK);
     }
+
+    @GetMapping("/all-task")
+    public ResponseEntity <List<TaskRequest>> getAllTask(){
+        return ResponseEntity.ok(taskService.findAllTask());
+    }
 }

@@ -125,4 +125,30 @@ public class TaskServiceImpl implements TaskService {
         taskRepository.save(task);
         return "Status Updated";
     }
+
+    @Override
+    public List<TaskRequest> findAllTask() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Users users = usersRepository.findUsersByEmail(user.getUsername());
+        if(users == null){
+            throw new UserNotFoundException("user not found");
+        }
+
+        List<TaskRequest> tasks = new ArrayList<>();
+        List<Task> allTask = taskRepository.findTaskByUser1(users);
+
+        for(Task task : allTask){
+            TaskRequest taskRequest = new TaskRequest();
+            taskRequest.setId(task.getId());
+            taskRequest.setDescription(task.getDescription());
+            taskRequest.setTitle(task.getTitle());
+            taskRequest.setStatus(task.getStatus());
+            taskRequest.setCreatedAt(task.getCreatedAt());
+            taskRequest.setUpdatedAt(task.getUpdatedAt());
+            taskRequest.setCompletedAt(task.getCompletedAt());
+            tasks.add(taskRequest);
+        }
+
+        return tasks;
+    }
 }
